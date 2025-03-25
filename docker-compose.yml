@@ -1,0 +1,25 @@
+services:
+  messageria:
+    restart: always
+    image: mysql:8.0
+    container_name: messageria
+    environment:
+      MYSQL_USER: messageria
+      MYSQL_DATABASE: messageria
+      MYSQL_PASSWORD: messageria
+      MYSQL_ROOT_PASSWORD: messageria
+    ports:
+      - "3310:3306"
+    volumes:
+      - messageria-data:/var/lib/mysql
+      - ./mysql/conf.d:/etc/mysql/conf.d
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "messageria", "-pmessageria"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+volumes:
+  messageria-data:
