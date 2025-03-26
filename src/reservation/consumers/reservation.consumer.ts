@@ -1,59 +1,42 @@
 import { ReservationService } from '../reservation.service';
-import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ClientProxy, ClientProxyFactory, Transport } from '@nestjs/microservices';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 
 @Injectable()
-export class ReservationConsumer implements OnModuleInit {
-    private client: ClientProxy;
-
+export class ReservationConsumer {
     private logger = new Logger('ReservationConsumer');
 
     constructor(
         @Inject(ReservationService)
         private reservationService: ReservationService,
+    ) { }
+
+    // @EventPattern('reservation_queue')
+    @MessagePattern('reservation_queue')
+    async handleReservationCreated(
+        @Payload() data: unknown,
+        @Ctx() context: RmqContext
     ) {
-        this.client = ClientProxyFactory.create({
-            transport: Transport.RMQ,
-            options: {
-                urls: ['amqp://localhost:5672'], // URL do seu RabbitMQ
-                queue: 'reservation_queue',
-                queueOptions: {
-                    durable: true // Fila durável sobrevive a reinicializações do servidor
-                },
-            },
-        });
-    }
+        console.log(data);
+        console.log(context);
+        // const channel = context.getChannelRef();
+        // const originalMessage = context.getMessage();
 
-    async onModuleInit() {
-        try {
-            await this.client.connect();
+        // try {
+        //     this.logger.log(`Mensagem recebida: ${JSON.stringify(data)}`);
 
-            // Padrão recomendado para consumir mensagens continuamente
-            this.client
-                .emit('reservation_created', {}) // Pode ser usado para trigger inicial
-                .subscribe();
+        //     await this.reservationService.createReservation(data);
 
-            // Ou usando um padrão de assinatura
-            await this.client.send('reservation_queue', {}).subscribe({
-                next: async (message) => {
-                    console.log('Mensagem recebida:', message);
-                    try {
-                        await this.reservationService.createReservation(message);
-                        // Confirmação de entrega (ack) implícita no NestJS
-                    } catch (err) {
-                        console.error('Erro ao processar reserva:', err);
-                        // Aqui você poderia implementar DLQ (Dead Letter Queue)
-                    }
-                },
-                error: (err) => console.error('Erro na conexão:', err),
-            });
+        //     // Confirma processamento da mensagem
+        //     channel.ack(originalMessage);
 
-        } catch (e) {
-            this.logger.error(e);
-        }
-    }
+        //     this.logger.log('Reserva processada com sucesso.');
+        // } catch (err) {
+        //     this.logger.error('Erro ao processar reserva:', err);
 
-    async onApplicationShutdown() {
-        await this.client.close();
+        //     // Em caso de erro, rejeita a mensagem
+        //     // Pode ser configurado para enviar para DLQ
+        //     channel.nack(originalMessage, false, false);
+        // }
     }
 }
