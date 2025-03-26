@@ -44,6 +44,8 @@ export class ReservationService {
 
     await this.reservationRepository.save(reservation);
 
+
+    // Cria os quartos vinculados à reserva
     for (const room of data.rooms) {
       const reservedRoom = this.roomRepository.create({
         dailyRate: room.daily_rate,
@@ -55,6 +57,8 @@ export class ReservationService {
       });
       await this.roomRepository.save(reservedRoom);
     }
+
+    console.log(`Reserva criada com sucesso: ${reservation.uuid}`);
   }
 
   async getReservations(uuid?: string, customerId?: number, roomId?: number) {
