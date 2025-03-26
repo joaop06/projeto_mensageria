@@ -6,7 +6,7 @@ const sendMessage = async () => {
 
     const queue = 'reservation_queue';
     const message = {
-        pattern: 'reservation_create',
+        pattern: 'reservation_queue',
         data: {
             uuid: '3030-499f-39f949',
             created_at: '2023-09-01 22:33:00',
@@ -33,10 +33,11 @@ const sendMessage = async () => {
     };
 
     await channel.assertQueue(queue);
+    const bufferMessage = Buffer.from(JSON.stringify(message));
 
-    channel.sendToQueue(queue, Buffer.from(JSON.stringify({ pattern: 'reservation_queue', data: 'new message kdfjslfjsld' })));
+    channel.sendToQueue(queue, bufferMessage);
 
-    console.log(`✅ Sent: ${JSON.stringify({ pattern: 'reservation_queue', data: 'new message kdfjslfjsld' })}`);
+    console.log(`✅ Sent: ${bufferMessage}`);
 
     setTimeout(() => connection.close(), 500);
 };

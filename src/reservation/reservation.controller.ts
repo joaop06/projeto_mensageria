@@ -1,5 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Ctx, RmqContext } from '@nestjs/microservices';
 import { ReservationService } from './reservation.service';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 
 @Controller('reserves')
 export class ReservationController {
@@ -12,5 +13,13 @@ export class ReservationController {
     @Query('roomId') roomId?: number,
   ) {
     return await this.reservationService.getReservations(uuid, customerId, roomId);
+  }
+
+  @Post()
+  async publishMessageToReserve(@Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+
+    const message = require('../../../message.json');
+    channel.sendToQueue('reservation_queue', Buffer.from(JSON.stringify(message)));
   }
 }

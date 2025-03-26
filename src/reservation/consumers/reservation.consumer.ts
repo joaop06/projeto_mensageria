@@ -11,32 +11,30 @@ export class ReservationConsumer {
         private reservationService: ReservationService,
     ) { }
 
-    // @EventPattern('reservation_queue')
-    @MessagePattern('reservation_queue')
+    // @MessagePattern('reservation_queue')
+    @EventPattern('reservation_queue')
     async handleReservationCreated(
         @Payload() data: unknown,
         @Ctx() context: RmqContext
     ) {
-        console.log(data);
-        console.log(context);
-        // const channel = context.getChannelRef();
-        // const originalMessage = context.getMessage();
+        const channel = context.getChannelRef();
+        const originalMessage = context.getMessage();
 
-        // try {
-        //     this.logger.log(`Mensagem recebida: ${JSON.stringify(data)}`);
+        try {
+            this.logger.log(`Mensagem recebida: ${JSON.stringify(data)}`);
 
-        //     await this.reservationService.createReservation(data);
+            await this.reservationService.createReservation(data);
 
-        //     // Confirma processamento da mensagem
-        //     channel.ack(originalMessage);
+            // Confirma processamento da mensagem
+            channel.ack(originalMessage);
 
-        //     this.logger.log('Reserva processada com sucesso.');
-        // } catch (err) {
-        //     this.logger.error('Erro ao processar reserva:', err);
+            this.logger.log('Reserva processada com sucesso.');
+        } catch (err) {
+            this.logger.error('Erro ao processar reserva:', err);
 
-        //     // Em caso de erro, rejeita a mensagem
-        //     // Pode ser configurado para enviar para DLQ
-        //     channel.nack(originalMessage, false, false);
-        // }
+            // Em caso de erro, rejeita a mensagem
+            // Pode ser configurado para enviar para DLQ
+            channel.nack(originalMessage, false, false);
+        }
     }
 }
