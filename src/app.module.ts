@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeOrmConfig } from '../config/typeorm.config';
 import { CustomerModule } from './customer/customer.module';
-import { ReservationModule } from './reservation/reservation.module';
+import { ReservationModule } from './reservations/reservation.module';
 
 @Module({
   imports: [
@@ -11,4 +11,4 @@ import { ReservationModule } from './reservation/reservation.module';
     TypeOrmModule.forRoot(typeOrmConfig),
   ],
 })
-export class AppModule {}
+export class AppModule { }

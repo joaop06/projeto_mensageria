@@ -1,13 +1,13 @@
-import { Reservation } from '../../reservation/entities/reservation.entity';
 import {
   Column,
-  CreateDateColumn,
-  DeleteDateColumn,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  DeleteDateColumn,
   UpdateDateColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Reservation } from '../../reservations/entities/reservation.entity';
 
 @Entity()
 export class Customer {

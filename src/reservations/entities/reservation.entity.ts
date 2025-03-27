@@ -34,6 +34,12 @@ export class Reservation {
   @OneToMany(() => ReservedRoom, (room) => room.reservation)
   rooms: ReservedRoom[];
 
+  @Column({
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP'
+  })
+  indexedIn: Date;
+
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;
 
