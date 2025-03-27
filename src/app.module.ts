@@ -11,4 +11,4 @@ import { ReservationModule } from './reservation/reservation.module';
     TypeOrmModule.forRoot(typeOrmConfig),
   ],
 })
-export class AppModule { }
+export class AppModule {}

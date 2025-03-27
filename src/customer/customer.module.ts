@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Customer } from './entities/customer.entity';
+import { CreateCustomerUseCase } from './use-cases/create-customer.use-case';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Customer])]
+  exports: [CreateCustomerUseCase],
+  providers: [CreateCustomerUseCase],
+  imports: [TypeOrmModule.forFeature([Customer])],
 })
-export class CustomerModule { }
+export class CustomerModule {}

@@ -1,43 +1,43 @@
 import {
-    Column,
-    Entity,
-    ManyToOne,
-    CreateDateColumn,
-    DeleteDateColumn,
-    UpdateDateColumn,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  ManyToOne,
+  CreateDateColumn,
+  DeleteDateColumn,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Reservation } from './reservation.entity';
 
 @Entity()
 export class ReservedRoom {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    dailyRate: number;
+  @Column()
+  dailyRate: number;
 
-    @Column()
-    numberOfDays: number;
+  @Column()
+  numberOfDays: number;
 
-    @Column()
-    reservationDate: Date;
+  @Column()
+  reservationDate: Date;
 
-    @Column()
-    categoryId: string;
+  @Column()
+  categoryId: string;
 
-    @Column()
-    subCategoryId: string;
+  @Column()
+  subCategoryId: string;
 
-    @ManyToOne(() => Reservation, (reservation) => reservation.rooms)
-    reservation: Reservation;
+  @ManyToOne(() => Reservation, (reservation) => reservation.rooms)
+  reservation: Reservation;
 
-    @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
-    @DeleteDateColumn({ type: 'timestamp' })
-    deletedAt: Date;
+  @DeleteDateColumn({ type: 'timestamp' })
+  deletedAt: Date;
 }
