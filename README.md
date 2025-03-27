@@ -1,5 +1,9 @@
 # Projeto de Mensageria para Sistema de Reservas de Hotel
 
+## Alunos
+ - João Pedro Borges Araújo
+ - Raul Silva Araújo
+
 ## 📌 **Contexto do Projeto**
 Este projeto faz parte da disciplina **Computação em Nuvem 2** no curso de **Desenvolvimento de Software Multiplataforma** na **FATEC**.  
 O objetivo é implementar um sistema de mensageria que consuma dados de reservas de um sistema de hotelaria, persistindo essas informações em um banco de dados relacional e disponibilizando uma API para consulta dessas reservas.
