@@ -12,13 +12,24 @@ const sendMessage = async () => {
             created_at: '2023-09-01 22:33:00',
             type: 'AB',
             customer: {
-                id: 99494,
-                name: 'João da Silva'
+                id: 3223,
+                name: 'Catapimbas'
             },
             rooms: [
                 {
                     id: 1,
-                    daily_rate: 300.00,
+                    daily_rate: 32342.00,
+                    number_of_days: 3,
+                    reservation_date: '2025-09-15',
+                    category: {
+                        id: 'AM',
+                        sub_category: {
+                            id: 'BCRU'
+                        }
+                    }
+                }, {
+                    id: 2,
+                    daily_rate: 56565.00,
                     number_of_days: 3,
                     reservation_date: '2025-09-15',
                     category: {

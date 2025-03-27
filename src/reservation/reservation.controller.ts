@@ -20,6 +20,6 @@ export class ReservationController {
     const channel = context.getChannelRef();
 
     const message = require('../../../message.json');
-    channel.sendToQueue('reservation_queue', Buffer.from(JSON.stringify(message)));
+    return await channel.sendToQueue('reservation_queue', Buffer.from(JSON.stringify(message)));
   }
 }
