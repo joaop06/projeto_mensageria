@@ -1,93 +1,100 @@
-import * as amqp from 'amqplib';
-import { Channel, ChannelModel } from 'amqplib';
+import { config } from 'dotenv';
+import { PubSub } from '@google-cloud/pubsub';
+import { ConfigService } from '@nestjs/config';
 import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { ConsumeReservationMessageDto } from '../dto/consume-reservation-message.dto';
 import { ConsumeReservationMessageUseCase } from '../use-cases/consume-reservation-message.use-case';
 
+config();
+const configService = new ConfigService();
+
+const GCP_PROJECT_ID = configService.get('GCP_PROJECT_ID');
+const PUBSUB_TOPIC_NAME = configService.get('PUBSUB_TOPIC_NAME');
+const PUBSUB_SUBSCRIPTION_NAME = configService.get('PUBSUB_SUBSCRIPTION_NAME');
+const GOOGLE_APPLICATION_CREDENTIALS = configService.get('GOOGLE_APPLICATION_CREDENTIALS');
+
 @Injectable()
 export class ReservationConsumer implements OnModuleInit {
-  private channel: Channel;
-
-  private connection: ChannelModel;
 
   private logger = new Logger('ReservationConsumer');
 
   private RESERVATION_QUEUE_NAME = 'reservation_queue';
 
+
+  private pubSubClient = new PubSub();
+  private topicName = 'reservation-topic';
+  private subscriptionName = 'reservation-sub';
+
   constructor(
     @Inject(ConsumeReservationMessageUseCase)
     private consumeReservationMessageUseCase: ConsumeReservationMessageUseCase,
-  ) {}
+  ) { }
 
   async onModuleInit() {
-    this.connection = await amqp.connect('amqp://localhost');
-    this.channel = await this.connection.createChannel();
-
     await this.handleReservationCreated();
   }
 
   async handleReservationCreated(): Promise<void> {
-    await this.channel.assertQueue(this.RESERVATION_QUEUE_NAME);
+    // Cria um tópico e subtópico se ainda não existir
+    await this.ensureTopicAndSubscription();
 
-    await this.channel.consume(
-      this.RESERVATION_QUEUE_NAME,
-      async (msg): Promise<void> => {
-        // eslint-disable-line
-        if (msg === null) return;
+    const subscription = this.pubSubClient.subscription(this.subscriptionName);
+    const messageHandler = async (message: any) => {
+      try {
+        this.logger.log(`📥 Received message: ${message.data.toString()}`);
 
-        try {
-          const { content } = msg;
-          const { data } = JSON.parse(content.toString()); // eslint-disable-line
+        const data = JSON.parse(message.data.toString());
 
-          this.logger.log(`📥 Received message: ${data}`);
+        const reservation = await this.consumeReservationMessageUseCase.execute(
+          data as ConsumeReservationMessageDto,
+        );
 
-          const reservation =
-            await this.consumeReservationMessageUseCase.execute(
-              data as ConsumeReservationMessageDto,
-            );
+        // Acknowledge the message
+        // message.ack();
 
-          // Confirma processamento da mensagem
-          this.channel.ack(msg);
+        this.logger.log(
+          'Reservation processed successfully',
+          JSON.stringify(reservation),
+        );
+      } catch (err) {
+        this.logger.error('Error processing reservation:', err);
 
-          this.logger.log(
-            'Reservation processed successfully',
-            JSON.stringify(reservation),
-          );
-        } catch (err) {
-          this.logger.error('Error processing reservation:', err);
+        // In case of error, don't acknowledge the message
+        // It will be redelivered after the ack deadline
+        // Alternatively, you could nack it: message.nack();
+        // message.nack();
+      }
+    };
 
-          // Em caso de erro, rejeita a mensagem
-          // Pode ser configurado para enviar para DLQ
-          this.channel.nack(msg, false, false);
-        }
-      },
-    );
+    subscription.on('message', messageHandler);
+
+    this.logger.log(`🚀 Listening for messages on subscription ${this.subscriptionName}`);
   }
 
-  // // @MessagePattern('reservation_queue')
-  // @EventPattern('reservation_queue')
-  // async handleReservationCreated(
-  //     @Payload() data: unknown,
-  //     @Ctx() context: RmqContext
-  // ) {
-  //     const channel = context.getChannelRef();
-  //     const originalMessage = context.getMessage();
+  private async ensureTopicAndSubscription(): Promise<void> {
+    try {
+      // Check if topic exists, create if not
+      const [topics] = await this.pubSubClient.getTopics();
+      const topicExists = topics.some(t => t.name.endsWith(this.topicName));
 
-  //     try {
-  //         this.logger.log(`Mensagem recebida: ${JSON.stringify(data)}`);
+      if (!topicExists) {
+        await this.pubSubClient.createTopic(this.topicName);
+        this.logger.log(`Topic ${this.topicName} created`);
+      }
 
-  //         await this.reservationService.createReservation(data);
+      // Check if subscription exists, create if not
+      const [subscriptions] = await this.pubSubClient.getSubscriptions();
+      const subExists = subscriptions.some(s => s.name.endsWith(this.subscriptionName));
 
-  //         // Confirma processamento da mensagem
-  //         channel.ack(originalMessage);
-
-  //         this.logger.log('Reserva processada com sucesso.');
-  //     } catch (err) {
-  //         this.logger.error('Erro ao processar reserva:', err);
-
-  //         // Em caso de erro, rejeita a mensagem
-  //         // Pode ser configurado para enviar para DLQ
-  //         channel.nack(originalMessage, false, false);
-  //     }
-  // }
+      if (!subExists) {
+        await this.pubSubClient
+          .topic(this.topicName)
+          .createSubscription(this.subscriptionName);
+        this.logger.log(`Subscription ${this.subscriptionName} created`);
+      }
+    } catch (err) {
+      this.logger.error('Error ensuring topic/subscription exists:', err);
+      throw err;
+    }
+  }
 }
