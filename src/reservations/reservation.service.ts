@@ -8,7 +8,7 @@ export class ReservationService {
   constructor(
     @InjectRepository(Reservation)
     private reservationRepository: Repository<Reservation>,
-  ) {}
+  ) { }
 
   async findById(id: number): Promise<Reservation | null> {
     return await this.reservationRepository.findOne({
@@ -22,8 +22,9 @@ export class ReservationService {
 
   async findAll(
     uuid?: string,
-    customerId?: number,
     roomId?: number,
+    customerId?: number,
+    customerName?: string,
   ): Promise<Reservation[]> {
     const query = this.reservationRepository
       .createQueryBuilder('reservation')
@@ -35,6 +36,10 @@ export class ReservationService {
 
     if (customerId) {
       query.andWhere('reservation.customerId = :customerId', { customerId });
+    }
+
+    if (customerName) {
+      query.andWhere('reservation.customer.name = :name', { name: customerName });
     }
 
     if (roomId) {

@@ -1,3 +1,4 @@
+import * as path from 'path';
 import { config } from 'dotenv';
 import { PubSub } from '@google-cloud/pubsub';
 import { ConfigService } from '@nestjs/config';
@@ -27,7 +28,7 @@ export class PubSubService implements OnModuleInit {
     async onModuleInit() {
         this.pubSubClient = new PubSub({
             projectId: GCP_PROJECT_ID,
-            keyFilename: GOOGLE_APPLICATION_CREDENTIALS,
+            credentials: require(path.join(__dirname, '../../', GOOGLE_APPLICATION_CREDENTIALS))
         });
 
         this.subscribeMessage(GCP_PUBSUB_SUBSCRIPTION);

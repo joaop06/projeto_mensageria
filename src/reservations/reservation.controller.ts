@@ -10,10 +10,11 @@ export class ReservationController {
   @Get()
   async findAll(
     @Query('uuid') uuid?: string,
-    @Query('customerId') customerId?: number,
     @Query('roomId') roomId?: number,
+    @Query('customerId') customerId?: number,
+    @Query('customerName') customerName?: string,
   ): Promise<Reservation[]> {
-    return await this.reservationService.findAll(uuid, customerId, roomId);
+    return await this.reservationService.findAll(uuid, customerId, roomId, customerName);
   }
 
   @Get(':id')

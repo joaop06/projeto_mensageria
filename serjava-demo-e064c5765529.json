@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "serjava-demo",
+  "private_key_id": "e064c576552917ca31b258c26e9633d0dd0a9a34",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC5tYiO2meKhjY4\nE0gC0Zjhgb2UIm5ulQUeSFcDAXmbnZ35bFSZGkdQf5FxAgWo+cDfop5pmQNE5j+n\n891Qiw8XvQ14baN+5lPH/v0AkNY9U7W4jJRBvFVva/r7FoWC2aRVhaXTs7ggClvq\n+Mjjz7+54L4iski0qU1epx3K2R4c9AgDs73BojpQWfS4nYddwa/GXtKG0+ZUvJ1m\noNK0marNf/ki3FTpWy1sFgjzmtOaLmHIR4ue/+NmMtR/RXOBBpp6tXS3obe/4viY\nOjCj9223Ehip0r39bGQ2m8Gd0KQUf/T5cGGo0fVt1cPJz4Lg6r+HOInt8Bs/I5nb\nJR+eqa3hAgMBAAECggEACfq7GKAcbcl6CufgWARu4HliGF6ETC12XbL5+Aehgw8E\ngPWFE0gh+m2sgWPgLX0kU/AvbpHCJvbvh0U3yJ78Y+RtH6JWpZhXerkVW+0skhWY\nP49QXTrzZV4qWclTSd2LsuvQZjCzbYdY+qa9Vt6gWSr+VKt7dDff2D0HQRILR/du\nsCC84trFBic2vWsextV8uYenVu9iQdZ1poqxUhLG5Su5OITfQw3dw9MMOg9H1N3d\nFtcrdcYxJbWhvirh42w2gDUJMed/tWX1dgVJNlJ+tzZB7zwd2eH3qhrLaqZIigzV\n2colkXGPpnefIlqvCSGH/0o6z7c6JnSb45GBvNfp1QKBgQDgkCtlLAqcjhJpHaNH\nPI3N9R9p41TLyebJtG0Oqve33lFx2bh51grwqewMsYgUpQ67F39UxgcHFwjXrrsv\nD4f7MltCqh+uM0jLU6Y6RKFP5U9CHYXGmRMb+bcIQUWzyUIJJi6Y/1CrHnY3qDrO\nTdzlD0MQUYhiXIhWW0gllQE/XQKBgQDTtOx1eOwljTKZkhVCXkfG66APo9ykqFUE\n48VSVFDPTSBcj+FEuBzy30pY7nWvvHcCyyZvu4DDKk633Q1TTf7td76I2a7qdovn\nO0FsQFrbWLIpubXxvYSDBYYiGGX/caZsAceLvYpMEhx22kQUqtsIcMhFn2H4nz1E\nZSzJmZf0VQKBgQDEXq3j6dBZuI725pjqaVRjfu96a/WxwxuS1LjtM6otWjaERWxg\n9kBY1W56ZyBlVTT9e/23xvdMRuNPoBdFfuJdUlqlgBj1/xiv3LUmjO8264IUgbaC\nxUcFlqdsi4+FOQAK+h2TYuhKyvd7khviXgpFL8RoV7PYt6vtQCNl4dfWbQKBgQDN\nYoy0Oqf+lkksq4hsZsMDvLv/8FyycYxpvf9Eq//p3U0z/3HwFR4gkXezZ0RNRW3A\nDA4x/5ofvP+5aH7w/o3/G1iBs436cR+xKM+DkbuTaS0PRde5ur6/zbAfi8QIWd22\nktNgQnXU7w0mUQITet4cBi6FPObzKKlrnSwiORwuMQKBgGAUXbpExZk62I6m8uXV\nToPE9jCU353XtgTozaW0dg1akxBNWyY+XX8PM9K9sA68CKXVjBnymgrQaLvkc/f3\n3G6iUOBRfP4Bj3h7v2kVIcRk+px+2143pkZDrYJjSag2Wzib/mFEbSM7di97o5Tg\nOQK4qffgVXdP13z4B7KS00dQ\n-----END PRIVATE KEY-----\n",
+  "client_email": "joao-pedro@serjava-demo.iam.gserviceaccount.com",
+  "client_id": "108749901172337573317",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/joao-pedro%40serjava-demo.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
